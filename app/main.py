@@ -1,7 +1,8 @@
 from fastapi import FastAPI
+from app.routes import vehicle_routes
+from app.db.connection import engine, Base
 
+Base.metadata.create_all(bind=engine)
 app = FastAPI()
 
-@app.get("/")
-def home():
-  return {"Hello : world!"}
+app.include_router(vehicle_routes.router)
