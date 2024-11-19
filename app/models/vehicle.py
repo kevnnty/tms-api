@@ -10,6 +10,6 @@ class Vehicle(Base):
     model = Column(String)
     capacity = Column(Integer)
     status = Column(String, default="available")  # "available", "maintenance"
-    # route_id = Column(Integer, ForeignKey("routes.id"))
+    route_id = Column(Integer, ForeignKey("routes.id"))
 
-    # route = relationship("Route", back_populates="vehicles")
+    route = relationship("Route", back_populates="vehicles")
