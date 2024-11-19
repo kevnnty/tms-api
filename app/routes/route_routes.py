@@ -25,8 +25,8 @@ def create_route(route: RouteCreate, db: Session = Depends(get_db)):
 
 # List Routes
 @router.get("/", response_model=list[RouteResponse])
-def list_routes(skip: int = 0, limit: int = 10, db: Session = Depends(get_db)):
-    routes = RouteService.get_routes(db=db, skip=skip, limit=limit)
+def list_routes(db: Session = Depends(get_db)):
+    routes = RouteService.get_routes(db=db)
     return routes
 
 

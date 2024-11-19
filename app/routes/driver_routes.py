@@ -1,8 +1,8 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from app.db.connection import SessionLocal
-from app.schemas.vehicle_schema import VehicleCreate, VehicleResponse
-from app.services.vehicle_service import VehicleService
+from app.schemas.driver_schema import DriverCreate, DriverResponse
+from app.services.driver_service import DriverService
 
 router = APIRouter()
 
@@ -13,28 +13,31 @@ def get_db():
         yield db
     finally:
         db.close()
-        
-        
-        
-# Create Vehicle
-@router.post("/", response_model=VehicleResponse)
-def create_vehicle(vehicle: VehicleCreate, db: Session = Depends(get_db)):
-    db_vehicle = VehicleService.create_vehicle(db=db, vehicle_data=vehicle)
-    return db_vehicle
 
 
 
-# List Vehicles
-@router.get("/", response_model=list[VehicleResponse])
-def list_vehicles(skip: int = 0, limit: int = 10, db: Session = Depends(get_db)):
-    vehicles = VehicleService.get_vehicles(db=db, skip=skip, limit=limit)
-    return vehicles
+
+# Create Driver
+@router.post("/", response_model=DriverResponse)
+def create_driver(driver: DriverCreate, db: Session = Depends(get_db)):
+    db_driver = DriverService.create_driver(db=db, driver_data=driver)
+    return db_driver
 
 
-# Get Vehicle by ID
-@router.get("/{vehicle_id}", response_model=VehicleResponse)
-def get_vehicle(vehicle_id: int, db: Session = Depends(get_db)):
-    db_vehicle = VehicleService.get_vehicle_by_id(db=db, vehicle_id=vehicle_id)
-    if db_vehicle is None:
-        raise HTTPException(status_code=404, detail="Vehicle not found")
-    return db_vehicle
+
+
+# List Drivers
+@router.get("/", response_model=list[DriverResponse])
+def list_drivers(db: Session = Depends(get_db)):
+    drivers = DriverService.get_drivers(db=db)
+    return drivers
+
+
+
+# Get Driver by ID
+@router.get("/{driver_id}", response_model=DriverResponse)
+def get_driver(driver_id: int, db: Session = Depends(get_db)):
+    db_driver = DriverService.get_driver_by_id(db=db, driver_id=driver_id)
+    if db_driver is None:
+        raise HTTPException(status_code=404, detail="Driver not found")
+    return db_driver

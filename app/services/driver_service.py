@@ -14,8 +14,8 @@ class DriverService:
 
     
     
-    def get_drivers(db: Session, skip: int = 0, limit: int = 10):
-        return db.query(Driver).offset(skip).limit(limit).all()
+    def get_drivers(db: Session):
+        return db.query(Driver).all()
 
     
     

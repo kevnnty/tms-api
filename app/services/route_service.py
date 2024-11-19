@@ -13,8 +13,8 @@ class RouteService:
 
 
   
-    def get_routes(db: Session, skip: int = 0, limit: int = 10):
-        return db.query(Route).offset(skip).limit(limit).all()
+    def get_routes(db: Session):
+        return db.query(Route).all()
 
 
   

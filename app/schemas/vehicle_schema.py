@@ -1,17 +1,20 @@
 from pydantic import BaseModel
 from typing import Optional
 
-class VehicleCreate(BaseModel):
+class VehicleBase(BaseModel):
     license_plate: str
     model: str
     capacity: int
-    status: Optional[str] = "available"  # default value can be "available"
+    category: str = 'taxi'  # Default value
+    status: str = 'active'  # Default value
+    total_trips: int = 0
+    total_distance: float = 0.0
 
-    class Config:
-        orm_mode = True  # Tells Pydantic to treat SQLAlchemy models as dictionaries
+class VehicleCreate(VehicleBase):
+    route_id: Optional[int] = None
 
-class VehicleResponse(VehicleCreate):
-    id: int  # Include the ID field in the response
+class VehicleResponse(VehicleBase):
+    id: int
 
     class Config:
         orm_mode = True

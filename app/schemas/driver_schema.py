@@ -1,18 +1,17 @@
 from pydantic import BaseModel
 from typing import Optional
 
-class DriverCreate(BaseModel):
-    first_name: str
-    last_name: str
+class DriverBase(BaseModel):
+    name: str
     license_number: str
-    phone_number: Optional[str] = None
+    total_trips: int = 0
+    total_earnings: float = 0.0
 
-    class Config:
-        orm_mode = True
+class DriverCreate(DriverBase):
+    vehicle_id: Optional[int] = None
 
-class DriverResponse(DriverCreate):
+class DriverResponse(DriverBase):
     id: int
-    vehicle_id: Optional[int]  # Optional, as drivers may or may not be assigned to a vehicle
 
     class Config:
         orm_mode = True

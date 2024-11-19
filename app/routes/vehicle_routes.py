@@ -25,8 +25,8 @@ def create_vehicle(vehicle: VehicleCreate, db: Session = Depends(get_db)):
 
 # List Vehicles
 @router.get("/", response_model=list[VehicleResponse])
-def list_vehicles(skip: int = 0, limit: int = 10, db: Session = Depends(get_db)):
-    vehicles = VehicleService.get_vehicles(db=db, skip=skip, limit=limit)
+def list_vehicles(db: Session = Depends(get_db)):
+    vehicles = VehicleService.get_vehicles(db=db)
     return vehicles
 
 

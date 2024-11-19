@@ -12,8 +12,8 @@ class VehicleService:
         return db_vehicle
 
     
-    def get_vehicles(db: Session, skip: int = 0, limit: int = 10):
-        return db.query(Vehicle).offset(skip).limit(limit).all()
+    def get_vehicles(db: Session):
+        return db.query(Vehicle).all()
 
     
     
