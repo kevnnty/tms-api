@@ -1,9 +1,10 @@
 from fastapi import FastAPI
 from app.routes import vehicle_routes, driver_routes, route_routes
-from app.db.connection import engine, Base
 
-Base.metadata.create_all(bind=engine)
-app = FastAPI()
+app = FastAPI(
+  title="TMS | Transport Manangement System",
+  description=""
+)
 
 app.include_router(vehicle_routes.router, prefix="/vehicles", tags=["vehicles"])
 app.include_router(driver_routes.router, prefix="/drivers", tags=["drivers"])
