@@ -18,23 +18,6 @@ Check out Django version of the system [here](https://github.com/kevnnty/tms)
 - **SQLAlchemy**: For database models and ORM.
 - **PostgreSQL**: Database .
 
-## Endpoints
-
-### `/drivers`
-
-- **POST** `/drivers/`: Create a new driver.
-- **GET** `/drivers/`: Get a list of all drivers.
-- **GET** `/drivers/{driver_id}/`: Get a specific driver by ID.
-- **PUT** `/drivers/{driver_id}/`: Update a driver's details.
-- etc
-
-### `/routes`
-
-- **POST** `/routes/`: Create a new route.
-- **GET** `/routes/`: Get a list of all routes.
-- **GET** `/routes/{route_id}/`: Get a specific route by ID.
-- **PUT** `/routes/{route_id}/`: Update a route's details.
-- etc
 
 ## Database
 
