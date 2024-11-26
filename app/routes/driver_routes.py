@@ -41,3 +41,13 @@ def get_driver(driver_id: int, db: Session = Depends(get_db)):
     if db_driver is None:
         raise HTTPException(status_code=404, detail="Driver not found")
     return db_driver
+
+
+
+@router.put("/{driver_id}/assign-vehicle/{vehicle_id}")
+def assign_vehicle(driver_id: int, vehicle_id: int, db: Session = Depends(get_db)):
+    try:
+        driver = DriverService.assign_vehicle_to_driver(db, driver_id, vehicle_id)
+        return driver
+    except HTTPException as e:
+        raise e
