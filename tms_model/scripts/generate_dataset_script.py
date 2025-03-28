@@ -8,7 +8,7 @@ from app.models.driver import Driver
 from app.models.trip import Trip
 from app.db.connection import SessionLocal
 
-def generate_sample_data(num_routes=10, num_vehicles=20, num_drivers=15, num_trips=100):
+def generate_dataset(num_routes=10, num_vehicles=20, num_drivers=15, num_trips=100):
     """Generate sample data for the TMS database"""
     db = SessionLocal()
     try:
@@ -42,6 +42,7 @@ def generate_sample_data(num_routes=10, num_vehicles=20, num_drivers=15, num_tri
         # Generate Drivers
         drivers = []
         for i in range(1, num_drivers + 1):
+            preferred_routes = list(set(random.choices([f"R{r:03d}" for r in range(1, num_routes + 1)], k=3)))
             driver = Driver(
                 name=f"Driver {i}",
                 email=f"driver{i}@example.com",
@@ -62,7 +63,7 @@ def generate_sample_data(num_routes=10, num_vehicles=20, num_drivers=15, num_tri
                 customer_satisfaction=random.uniform(3.0, 5.0),
                 training_level=random.randint(1, 5),
                 certifications=json.dumps(["Basic", "Advanced"] if random.random() > 0.5 else ["Basic"]),
-                preferred_routes=json.dumps([f"R{random.randint(1, num_routes):03d}" for _ in range(3)]),
+                preferred_routes=json.dumps(preferred_routes),
                 fatigue_score=random.uniform(0.1, 0.5)
             )
             db.add(driver)
@@ -70,8 +71,15 @@ def generate_sample_data(num_routes=10, num_vehicles=20, num_drivers=15, num_tri
         db.commit()
         
         # Generate Vehicles
+        assigned_drivers = set()
         vehicles = []
         for i in range(1, num_vehicles + 1):
+            available_drivers = [d for d in drivers if d.id not in assigned_drivers]
+            driver_id = random.choice(available_drivers).id if available_drivers and random.random() > 0.2 else None
+            
+            if driver_id:
+                assigned_drivers.add(driver_id)
+
             vehicle = Vehicle(
                 license_plate=f"VEH{i:04d}",
                 model=random.choice(["Model A", "Model B", "Model C", "Model D"]),
@@ -88,15 +96,14 @@ def generate_sample_data(num_routes=10, num_vehicles=20, num_drivers=15, num_tri
                 engine_hours=random.uniform(1000, 20000),
                 idle_time_percentage=random.uniform(0.05, 0.3),
                 avg_speed=random.uniform(30, 60),
-                emissions_data=json.dumps({"co2": random.uniform(100, 300), 
-                                         "nox": random.uniform(10, 50)}),
+                emissions_data=json.dumps({"co2": random.uniform(100, 300), "nox": random.uniform(10, 50)}),
                 tire_wear_rate=random.uniform(0.001, 0.01),
                 breakdown_frequency=random.uniform(0.001, 0.05),
                 sensor_data_json=json.dumps({"engine_temp": random.uniform(180, 220),
                                            "oil_pressure": random.uniform(30, 70),
                                            "battery": random.uniform(12, 14)}),
                 operational_cost_per_mile=random.uniform(0.5, 2.0),
-                driver_id=random.choice(drivers).id if random.random() > 0.2 else None,
+                driver_id=driver_id,
                 route_id=random.choice(routes).id if random.random() > 0.3 else None
             )
             db.add(vehicle)
@@ -113,7 +120,6 @@ def generate_sample_data(num_routes=10, num_vehicles=20, num_drivers=15, num_tri
             trip_start = start_date + timedelta(days=random.randint(1, 364))
             expected_duration = float(route.estimated_travel_time.split()[0]) * 60  # Convert to minutes
             
-            # Some trips are completed, some are in progress
             is_completed = random.random() > 0.2
             
             trip = Trip(
@@ -142,42 +148,11 @@ def generate_sample_data(num_routes=10, num_vehicles=20, num_drivers=15, num_tri
                 trip.max_speed = trip.average_speed * random.uniform(1.1, 1.5)
                 trip.idle_time = actual_duration * random.uniform(0.05, 0.2)
                 trip.on_time_status = actual_duration <= expected_duration * 1.1
-                
-                if not trip.on_time_status:
-                    trip.delay_reason = random.choice([
-                        "Traffic congestion", 
-                        "Weather conditions", 
-                        "Vehicle breakdown", 
-                        "Driver rest period", 
-                        "Loading/unloading delay"
-                    ])
-                
-                if random.random() < 0.1:
-                    trip.maintenance_issues_reported = random.choice([
-                        "Check engine light", 
-                        "Brake noise", 
-                        "Transmission issues", 
-                        "Tire pressure warning"
-                    ])
-                
-                if random.random() < 0.05:
-                    trip.incidents_reported = random.choice([
-                        "Minor collision", 
-                        "Cargo shift", 
-                        "Road closure detour", 
-                        "Mechanical failure"
-                    ])
-            
+
             db.add(trip)
         
         db.commit()
-        return {
-            "routes": num_routes,
-            "vehicles": num_vehicles,
-            "drivers": num_drivers,
-            "trips": num_trips,
-            "status": "Data generated successfully"
-        }
+        return {"status": "Data generated successfully"}
     
     except Exception as e:
         db.rollback()

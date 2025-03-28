@@ -1,7 +1,7 @@
 from fastapi import FastAPI, APIRouter
 from app.routes import vehicle_routes, driver_routes, route_routes, trip_routes
 from app.db.connection import Base, engine
-from scripts import generate_dataset
+from tms_model.scripts import generate_dataset
 
 app = FastAPI(
   title="TMS | Transport Manangement System",
