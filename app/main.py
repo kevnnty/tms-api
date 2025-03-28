@@ -8,7 +8,6 @@ app = FastAPI(
   description=""
 )
 
-
 # Create all tables
 Base.metadata.create_all(bind=engine)
 

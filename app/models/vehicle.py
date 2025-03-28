@@ -14,7 +14,7 @@ class Vehicle(Base):
     total_trips = Column(Integer)
     total_distance_travelled = Column(Float)
     manufacture_year = Column(Integer)
-
+    company_name = Column(String)
     # New fields for ML
     fuel_efficiency = Column(Float)  # Miles per gallon or equivalent
     maintenance_score = Column(Float)  # Health score (0-1)
