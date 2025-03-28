@@ -10,7 +10,7 @@ class Route(Base):
     cost = Column(Float)
     start_location = Column(String(100))
     end_location = Column(String(100))
-    estimated_travel_time = Column(String(100))
+    estimated_travel_time = Column(Integer) # in hours
     distance = Column(Float)
     
     # New fields for ML

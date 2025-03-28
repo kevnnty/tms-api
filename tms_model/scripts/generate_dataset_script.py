@@ -43,7 +43,7 @@ def generate_dataset(num_routes=10, num_vehicles=20, num_drivers=15, num_trips=1
                 cost=random.uniform(100, 500),
                 start_location=random.choice(locations),
                 end_location=random.choice(locations),
-                estimated_travel_time=f"{random.randint(1, 10)} hours",
+                estimated_travel_time=random.randint(1, 10),
                 distance=random.uniform(50, 500),
                 avg_traffic_density=random.uniform(0.1, 0.9),
                 avg_fuel_consumption=random.uniform(10, 30),
@@ -159,7 +159,7 @@ def generate_dataset(num_routes=10, num_vehicles=20, num_drivers=15, num_trips=1
             
             trip_start = random_date(start_date, datetime.now())
             
-            expected_duration = float(route.estimated_travel_time.split()[0]) * 60  # Convert hours to minutes
+            expected_duration = float(route.estimated_travel_time) * 60  # Convert hours to minutes
             
             is_completed = random.random() > 0.2
             
