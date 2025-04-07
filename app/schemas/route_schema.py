@@ -6,7 +6,7 @@ class RouteBase(BaseModel):
     cost: float
     start_location: str
     end_location: str
-    estimated_travel_time: int
+    estimated_travel_time: float
     distance: float
     
     # New fields for ML
@@ -28,7 +28,7 @@ class RouteUpdate(BaseModel):
     cost: Optional[float] = None
     start_location: Optional[str] = None
     end_location: Optional[str] = None
-    estimated_travel_time: Optional[int] = None
+    estimated_travel_time: Optional[float] = None
     distance: Optional[float] = None
     
     # New fields for ML
